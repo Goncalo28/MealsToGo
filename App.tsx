@@ -1,20 +1,34 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import ExpoStatusBar from "expo-status-bar/build/ExpoStatusBar";
+import { ThemeProvider } from "styled-components";
+import { theme } from "./src/infrastructure/theme";
+import {
+  useFonts as useOswaldFont,
+  Oswald_400Regular,
+} from "@expo-google-fonts/oswald";
+import {
+  useFonts as useLatoFont,
+  Lato_400Regular,
+} from "@expo-google-fonts/lato";
+import { Navigation } from "./src/infrastructure/navigation";
+import { AuthContextProvider } from "./src/services/authentication/authContext";
 
 export default function App() {
+  const [oswaldLoaded] = useOswaldFont({ Oswald_400Regular });
+  const [latoLoaded] = useLatoFont({ Lato_400Regular });
+
+  if (!oswaldLoaded || !latoLoaded) {
+    return null;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <>
+      <ThemeProvider theme={theme}>
+        <AuthContextProvider>
+          <Navigation />
+        </AuthContextProvider>
+      </ThemeProvider>
+      <ExpoStatusBar style="auto" />
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
